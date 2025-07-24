@@ -26,8 +26,7 @@ saveButton.addEventListener('click', (event) => {
     inputField.value = '';
 });
 
-sendButton.addEventListener('click', (event) => {
-    event.preventDefault(); 
+sendButton.addEventListener('click', () => {
 
     const message = inputTextField.value.trim();
     if (!message) return;
@@ -62,18 +61,23 @@ ws.onopen = () => {
     console.log(' Connected to WebSocket server.');
 };
 
-ws.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    const messageElement = document.createElement('p');
-    messageElement.textContent = `[${msg.time}] ${msg.name}: ${msg.message}`;
-    messagesDiv.appendChild(messageElement);
-};
+async function connect() {
+    let myPromise = new Promise(function(resolve, reject) {
+        const ws = new WebSocket('ws://localhost:8080');
+        ws.onopen = function() {
+            resolve(chatContent.innerHTML);
+        };
+        ws.onerror = function() {
+            reject("Cannot connect");
+        };
+    });
 
-ws.onclose = () => {
-    console.log(' Disconnected from server.');
-};
-
-ws.onerror = (err) => {
-    console.error('Error:', err);
-};
+    try {
+        document.getElementById("chat").innerHTML = await myPromise;
+    } catch (error) {
+        document.getElementById("chat").innerHTML = error;
+        document.getElementById("chat").style.color = "red"; 
+    }
+}
+connect();
 
