@@ -13,25 +13,28 @@
                 <p>
                     Username: 
                 </p>
-                <input type="text">
-                <button>
+                <input type="text" id="userName" placeholder="Type your name">
+                <button id="nameButton">
                     save
                 </button>
             </div>
             <div>
-                <p>
+                <p id="userNameField">
                     name: 
                 </p>
             </div>
             <div class="mess-container">
-                <input type="text">
+                <input id ="message" type="text">
                 <div>
-                    <button>
+                    <button type ="button" id ="sendButton">
                         send
                     </button>
                 </div>
             </div>
-            
+            <p class ="boxchat" id = "chat">
+                (Content) 
+            </p>
         </div>
+        <script src="client.js"></script>
     </body>
 </html>

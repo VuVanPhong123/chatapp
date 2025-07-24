@@ -1,0 +1,25 @@
+.app-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;  
+    width: 50vw;
+    justify-self: center;
+}
+.info-container{
+    display: flex;
+    flex-direction: row;
+    gap: 20px
+}
+.mess-container{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+}
+
+.boxchat {
+    margin-left: 5% ;
+    border-style: solid;
+    width: 100%;
+    padding: 5%;
+}
