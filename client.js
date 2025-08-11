@@ -4,10 +4,11 @@ const userNameField = document.getElementById('userNameField');
 const inputTextField = document.getElementById('message');
 const sendButton = document.getElementById('sendButton');
 const messagesDiv = document.getElementById('messages');
-const chatContent= document.getElementById("chat")
+let chatContent ='';
+
 
 let userName = 'NO NAME USER';
-
+let ws;
 if (localStorage.getItem('userName')) {
     userName = localStorage.getItem('userName');
     userNameField.textContent = `name: ${userName}`;
@@ -46,38 +47,34 @@ sendButton.addEventListener('click', () => {
     inputTextField.value = '';
 });
 
-
 fetch('chat.json')
     .then(response => response.json())
     .then(jsonArray => {
-        chatContent.innerHTML = jsonArray.join('<br>');
+        chatContent = jsonArray.join('<br>');
+        ws = new WebSocket('ws://localhost:8080');
+        connect();
     })
     .catch(err => console.error('Error loading chat.json:', err));
 
-
-const ws = new WebSocket('ws://localhost:8080');
-
-ws.onopen = () => {
-    console.log(' Connected to WebSocket server.');
-};
-
 async function connect() {
     let myPromise = new Promise(function(resolve, reject) {
-        const ws = new WebSocket('ws://localhost:8080');
+        
         ws.onopen = function() {
-            resolve(chatContent.innerHTML);
+            resolve(chatContent);
         };
+        
         ws.onerror = function() {
-            reject("Cannot connect");
+            reject("Cannot connect to WebSocket");
         };
+        
     });
 
     try {
-        document.getElementById("chat").innerHTML = await myPromise;
+        const result = await myPromise;
+        document.getElementById("chat").innerHTML = result;
     } catch (error) {
         document.getElementById("chat").innerHTML = error;
-        document.getElementById("chat").style.color = "red"; 
+        document.getElementById("chat").style.color = "red";
     }
 }
-connect();
 
